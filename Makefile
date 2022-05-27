@@ -1,6 +1,6 @@
-CRATE=thing
-ADDON=thing
-LIBNAME=libthing.so
+CRATE=gdinput
+ADDON=gdinput
+LIBNAME=lib$(CRATE).so
 
 default: debug
 debug:

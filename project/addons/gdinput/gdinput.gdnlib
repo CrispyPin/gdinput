@@ -7,7 +7,7 @@ reloadable=true
 
 [entry]
 
-X11.64="res://addons/thing/bin/linux/libthing.so"
+X11.64="res://addons/gdinput/bin/linux/libgdinput.so"
 
 [dependencies]
 
