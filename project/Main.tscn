@@ -1,7 +1,16 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/gdinput/Input.tscn" type="PackedScene" id=1]
+[ext_resource path="res://demo.gd" type="Script" id=2]
 
 [node name="Main" type="Node"]
 
 [node name="ExampleThing" parent="." instance=ExtResource( 1 )]
+print_actions = true
+
+[node name="Timer" type="Timer" parent="ExampleThing"]
+wait_time = 0.1
+autostart = true
+script = ExtResource( 2 )
+
+[connection signal="timeout" from="ExampleThing/Timer" to="ExampleThing/Timer" method="_on_Timer_timeout"]

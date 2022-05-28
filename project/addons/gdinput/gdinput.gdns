@@ -3,5 +3,5 @@
 [ext_resource path="res://addons/gdinput/gdinput.gdnlib" type="GDNativeLibrary" id=1]
 
 [resource]
-class_name = "ExampleThing"
+class_name = "VirtualInput"
 library = ExtResource( 1 )
