@@ -6,10 +6,9 @@
 [node name="Main" type="Node"]
 
 [node name="ExampleThing" parent="." instance=ExtResource( 1 )]
-print_actions = true
 
 [node name="Timer" type="Timer" parent="ExampleThing"]
-wait_time = 0.1
+wait_time = 0.5
 autostart = true
 script = ExtResource( 2 )
 

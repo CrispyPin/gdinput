@@ -1,5 +1,5 @@
+use enigo::{Enigo, Key, KeyboardControllable};
 use gdnative::prelude::*;
-use enigo::*;
 
 #[derive(NativeClass)]
 #[inherit(Node)]
@@ -9,74 +9,39 @@ pub struct VirtualInput {
 	print_actions: bool,
 }
 
-
-enum KeyAction {
-	Down,
-	Up,
-	Press,
-}
-
-
 #[methods]
 impl VirtualInput {
 	fn new(_owner: &Node) -> Self {
-		Self { 
+		Self {
 			enigo: Enigo::new(),
 			print_actions: false,
 		}
 	}
 
-	#[export]
-	fn press(&mut self, _owner: &Node, key_name: String) {
-		self.key_event(key_name, KeyAction::Press);
-	}
-	
-	#[export]
-	fn key_down(&mut self, _owner: &Node, key_name: String) {
-		self.key_event(key_name, KeyAction::Down);
-	}
-	
-	#[export]
-	fn key_up(&mut self, _owner: &Node, key_name: String) {
-		self.key_event(key_name, KeyAction::Up);
+	#[method]
+	fn press(&mut self, key_name: String) {
+		if let Some(key) = name_to_key(&key_name) {
+			self.enigo.key_click(key);
+		}
 	}
 
-	fn key_event(&mut self, key_name: String, action: KeyAction) {		
+	#[method]
+	fn key_down(&mut self, key_name: String) {
 		if let Some(key) = name_to_key(&key_name) {
-			match action {
-				KeyAction::Up => {
-					if self.print_actions {
-						godot_print!("releasing {}", key_name);
-					}
-					self.enigo.key_up(key);
-				},
-				KeyAction::Down => {
-					if self.print_actions {
-						godot_print!("pressing {} down", key_name);
-					}
-					self.enigo.key_down(key);
-				},
-				KeyAction::Press => {
-					if self.print_actions {
-						godot_print!("pressing {}", key_name);
-					}
-					self.enigo.key_click(key);
-				}
-			}
+			self.enigo.key_down(key);
 		}
-		else {
-			godot_warn!("'{}' is not a recognised key", key_name);
+	}
+
+	#[method]
+	fn key_up(&mut self, key_name: String) {
+		if let Some(key) = name_to_key(&key_name) {
+			self.enigo.key_up(key);
 		}
 	}
 }
 
-
 fn name_to_key(name: &str) -> Option<Key> {
 	let name = name.to_lowercase();
-
-	if name.is_empty() {
-		return None;
-	}
 
 	if name.len() == 1 {
 		return Some(Key::Layout(name.chars().next().unwrap()));
@@ -115,6 +80,9 @@ fn name_to_key(name: &str) -> Option<Key> {
 		"space" => Some(Key::Space),
 		"tab" => Some(Key::Tab),
 		"uparrow" | "up" => Some(Key::UpArrow),
-		_ => None
+		unknown => {
+			godot_warn!("Unknown or unsupported key '{unknown}'");
+			None
+		}
 	}
 }

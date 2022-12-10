@@ -1,3 +1,3 @@
 # gdinput
 
-system-wide virtual keyboard input from godot
+System-wide virtual keyboard input from godot
